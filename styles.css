@@ -206,16 +206,17 @@ main#views { flex: 1; padding: 0 20px 40px; }
 
 .pose-svg {
   width: 100%; height: 100%;
-  stroke: var(--text);
+  stroke: var(--sage);
   fill: none;
-  stroke-width: 7.5;
+  stroke-width: 13;
   stroke-linecap: round;
   stroke-linejoin: round;
 }
-.pose-svg .ground { stroke: var(--text-muted); stroke-width: 3; opacity: 0.4; }
-.pose-svg circle { fill: var(--text); stroke: none; }
-.pose-svg .target { stroke: var(--accent); stroke-width: 9; }
-.pose-svg .arrow { stroke: var(--accent); stroke-width: 3.2; fill: none; opacity: 0.85; }
+.pose-svg .ground { stroke: var(--text-muted); stroke-width: 3; opacity: 0.35; }
+.pose-svg circle { fill: var(--sage); stroke: none; }
+.pose-svg .seam { fill: var(--surface); }
+.pose-svg .target { stroke: var(--accent); }
+.pose-svg .arrow { stroke: var(--accent); stroke-width: 4; fill: none; opacity: 0.9; }
 
 .filter-bar {
   display: flex;

@@ -1,10 +1,11 @@
 /* ---------------------------------------------------------
    Stretch data
-   Each pose is an original hand-drawn illustration (no
-   photos/stock art, so no copyright concerns): a clear stick
-   figure where the specific muscle being stretched is drawn
-   in the accent color (not a floating marker), plus a small
-   arrow showing the direction of movement.
+   Each pose is an original flat-silhouette illustration (no
+   photos/stock art, so no copyright concerns): a solid body
+   shape in the app's sage tone, with the specific muscle
+   being stretched picked out in the gold accent color, small
+   "seam" notches to separate head/limbs, and a directional
+   arrow.
 --------------------------------------------------------- */
 
 const CONTEXTS = [
@@ -25,7 +26,8 @@ const MUSCLE_GROUPS = [
 function svg(inner) {
   return `<svg viewBox="0 0 100 100" class="pose-svg" aria-hidden="true">${inner}</svg>`;
 }
-const GROUND = '<line x1="8" y1="93" x2="92" y2="93" class="ground"/>';
+const GROUND = '<line x1="6" y1="94" x2="94" y2="94" class="ground"/>';
+function seam(x, y) { return `<circle class="seam" cx="${x}" cy="${y}" r="4"/>`; }
 
 const STRETCHES = [
   {
@@ -34,11 +36,12 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Sit or stand tall. Gently drop one ear toward that shoulder until you feel a stretch along the opposite side of your neck. Keep shoulders level.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="47" y2="60"/>
       <line x1="47" y1="60" x2="35" y2="92"/><line x1="47" y1="60" x2="59" y2="92"/>
       <line x1="49" y1="38" x2="30" y2="30"/>
       <line class="target" x1="47" y1="40" x2="66" y2="55"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="42,30 34,26 40,20"/>`),
   },
   {
@@ -47,11 +50,12 @@ const STRETCHES = [
     duration: 20,
     cue: 'Lower your chin toward your chest, then slowly roll your head halfway to the right, then halfway to the left. Move slowly, no forcing.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="26" r="9"/>
+      <circle cx="50" cy="26" r="11"/>
       <line x1="50" y1="35" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/><line x1="50" y1="60" x2="62" y2="92"/>
       <line class="target" x1="50" y1="42" x2="30" y2="55"/>
       <line class="target" x1="50" y1="42" x2="70" y2="55"/>
+      ${seam(50, 35)}
       <polyline class="arrow" points="58,44 65,50 58,56"/>`),
   },
   {
@@ -60,11 +64,12 @@ const STRETCHES = [
     duration: 30,
     cue: 'Lift both shoulders up toward your ears, roll them back, then down. Repeat slowly, then reverse direction.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/><line x1="50" y1="60" x2="62" y2="92"/>
       <path class="target" d="M50 38 Q32 30 30 45" fill="none"/>
       <path class="target" d="M50 38 Q68 30 70 45" fill="none"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="64,32 70,38 64,44"/>`),
   },
   {
@@ -73,11 +78,12 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Bring one arm straight across your chest. Use the other forearm to gently press it closer. Keep that shoulder relaxed, away from your ear.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/><line x1="50" y1="60" x2="62" y2="92"/>
       <line class="target" x1="50" y1="40" x2="75" y2="45"/>
       <line x1="50" y1="40" x2="20" y2="42"/><line x1="20" y1="42" x2="30" y2="30"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="33,36 25,42 33,48"/>`),
   },
   {
@@ -86,12 +92,13 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Raise one arm overhead, bend the elbow so your hand reaches down your back. Use the other hand to gently press the elbow further.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/><line x1="50" y1="60" x2="62" y2="92"/>
       <line class="target" x1="50" y1="38" x2="60" y2="15"/>
       <line class="target" x1="60" y1="15" x2="55" y2="45"/>
       <line x1="50" y1="45" x2="35" y2="50"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="46,42 52,50 58,42"/>`),
   },
   {
@@ -100,11 +107,12 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Extend one arm forward, palm up. With the other hand, gently pull the fingers back toward you until you feel a stretch through the forearm.',
     img: svg(`${GROUND}
-      <circle cx="28" cy="30" r="9"/>
-      <line x1="28" y1="39" x2="30" y2="60"/>
+      <circle cx="26" cy="30" r="11"/>
+      <line x1="26" y1="39" x2="30" y2="60"/>
       <line x1="30" y1="60" x2="22" y2="92"/><line x1="30" y1="60" x2="40" y2="92"/>
-      <line class="target" x1="28" y1="45" x2="75" y2="48"/>
+      <line class="target" x1="26" y1="45" x2="75" y2="48"/>
       <line x1="60" y1="40" x2="72" y2="50"/>
+      ${seam(26, 39)}
       <polyline class="arrow" points="66,42 74,48 66,54"/>`),
   },
   {
@@ -113,13 +121,14 @@ const STRETCHES = [
     duration: 30,
     cue: 'Clasp your hands behind your back and gently lift them while opening your chest and squeezing your shoulder blades together.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/><line x1="50" y1="60" x2="62" y2="92"/>
       <line class="target" x1="37" y1="44" x2="63" y2="44"/>
       <path d="M50 40 Q28 45 32 65" fill="none"/>
       <path d="M50 40 Q72 45 68 65" fill="none"/>
       <line x1="32" y1="65" x2="68" y2="65"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="38,58 30,63 38,68"/>
       <polyline class="arrow" points="62,58 70,63 62,68"/>`),
   },
@@ -129,11 +138,12 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Reach one arm overhead and lean your torso to the opposite side, feeling a stretch along your ribs and waist. Keep hips facing forward.',
     img: svg(`${GROUND}
-      <circle cx="58" cy="22" r="9"/>
+      <circle cx="58" cy="22" r="11"/>
       <path class="target" d="M55 31 Q40 55 45 90" fill="none"/>
       <line x1="45" y1="90" x2="35" y2="92"/><line x1="45" y1="90" x2="58" y2="92"/>
       <line x1="55" y1="35" x2="20" y2="30"/>
       <path class="target" d="M55 35 Q75 45 78 20" fill="none"/>
+      ${seam(56, 30)}
       <polyline class="arrow" points="48,50 42,58 50,64"/>`),
   },
   {
@@ -142,12 +152,13 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Sit with legs extended, cross one foot over the other knee, and gently rotate your torso toward the bent-knee side, hand braced behind you.',
     img: svg(`
-      <circle cx="55" cy="30" r="9"/>
+      <circle cx="55" cy="30" r="11"/>
       <line class="target" x1="55" y1="39" x2="52" y2="65"/>
       <line x1="52" y1="65" x2="20" y2="72"/>
       <line x1="52" y1="65" x2="35" y2="88"/><line x1="35" y1="88" x2="60" y2="80"/>
       <line class="target" x1="55" y1="45" x2="72" y2="60"/>
       <line x1="55" y1="42" x2="35" y2="35"/>
+      ${seam(55, 39)}
       <polyline class="arrow" points="56,46 63,53 56,58"/>`),
   },
   {
@@ -156,10 +167,11 @@ const STRETCHES = [
     duration: 30,
     cue: 'On hands and knees, alternate between arching your back up (cat) and dipping it down while lifting your chest (cow). Move with your breath.',
     img: svg(`
-      <circle cx="78" cy="40" r="8"/>
+      <circle cx="78" cy="40" r="10"/>
       <path class="target" d="M70 45 Q45 30 22 45" fill="none"/>
       <line x1="22" y1="45" x2="20" y2="70"/><line x1="70" y1="45" x2="72" y2="70"/>
       <line x1="30" y1="55" x2="28" y2="80"/><line x1="60" y1="55" x2="62" y2="80"/>
+      ${seam(71, 44)}
       <polyline class="arrow" points="40,38 46,30 52,38"/>
       <polyline class="arrow" points="40,52 46,60 52,52"/>`),
   },
@@ -169,10 +181,11 @@ const STRETCHES = [
     duration: 45,
     cue: 'Kneel and sit back onto your heels, then fold forward with arms stretched out ahead, forehead resting toward the floor. Breathe deeply.',
     img: svg(`
-      <circle cx="80" cy="70" r="8"/>
+      <circle cx="80" cy="70" r="10"/>
       <path class="target" d="M74 68 Q45 62 18 30" fill="none"/>
       <line x1="18" y1="30" x2="14" y2="35"/>
       <line x1="70" y1="72" x2="55" y2="88"/><line x1="55" y1="88" x2="75" y2="90"/>
+      ${seam(74, 69)}
       <polyline class="arrow" points="24,34 16,30 22,24"/>`),
   },
   {
@@ -181,10 +194,11 @@ const STRETCHES = [
     duration: 30,
     cue: 'Lie face down, place forearms or hands under your shoulders, and gently press up, lifting your chest while keeping hips on the floor.',
     img: svg(`${GROUND}
-      <circle cx="72" cy="55" r="8"/>
+      <circle cx="72" cy="55" r="10"/>
       <path d="M65 58 Q45 60 20 88" fill="none"/>
       <path class="target" d="M55 62 Q46 72 42 84" fill="none"/>
       <line x1="55" y1="70" x2="60" y2="90"/><line x1="65" y1="65" x2="68" y2="90"/>
+      ${seam(66, 59)}
       <polyline class="arrow" points="62,58 68,50 72,58"/>`),
   },
   {
@@ -193,10 +207,11 @@ const STRETCHES = [
     duration: 30,
     cue: 'Stand with feet hip-width apart, hinge at the hips and let your torso hang toward the floor. Soften your knees, let your head relax.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="45" r="8"/>
+      <circle cx="50" cy="45" r="10"/>
       <path d="M50 53 Q46 65 50 78" fill="none"/>
       <line x1="50" y1="78" x2="42" y2="92"/><line x1="50" y1="78" x2="58" y2="92"/>
       <line class="target" x1="46" y1="58" x2="38" y2="80"/>
+      ${seam(50, 53)}
       <polyline class="arrow" points="44,72 50,78 56,72"/>`),
   },
   {
@@ -205,11 +220,12 @@ const STRETCHES = [
     duration: 30, sides: true,
     cue: 'Sit with one leg extended, the other bent with the foot near your inner thigh. Hinge forward over the straight leg, reaching toward your foot.',
     img: svg(`
-      <circle cx="72" cy="45" r="8"/>
+      <circle cx="72" cy="45" r="10"/>
       <path class="target" d="M66 48 Q45 55 25 60" fill="none"/>
       <line class="target" x1="25" y1="60" x2="24" y2="88"/>
       <line x1="60" y1="55" x2="50" y2="72"/>
       <line x1="66" y1="55" x2="60" y2="85"/><line x1="60" y1="85" x2="72" y2="85"/>
+      ${seam(68, 50)}
       <polyline class="arrow" points="34,56 26,60 34,66"/>`),
   },
   {
@@ -218,12 +234,13 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Stand tall (hold something for balance if needed), bend one knee and grab that ankle, gently pulling your heel toward your glutes.',
     img: svg(`${GROUND}
-      <circle cx="50" cy="24" r="9"/>
+      <circle cx="50" cy="24" r="11"/>
       <line x1="50" y1="33" x2="50" y2="60"/>
       <line x1="50" y1="60" x2="38" y2="92"/>
       <path class="target" d="M50 60 Q58 75 50 82" fill="none"/>
       <line x1="50" y1="82" x2="55" y2="60"/>
       <line x1="50" y1="40" x2="60" y2="72"/>
+      ${seam(50, 33)}
       <polyline class="arrow" points="52,70 58,78 62,70"/>`),
   },
   {
@@ -232,10 +249,11 @@ const STRETCHES = [
     duration: 30, sides: true,
     cue: 'Kneel on one knee, other foot planted forward. Shift your weight forward gently until you feel a stretch across the front of the kneeling hip.',
     img: svg(`${GROUND}
-      <circle cx="35" cy="45" r="8"/>
+      <circle cx="35" cy="45" r="10"/>
       <line class="target" x1="35" y1="53" x2="40" y2="72"/>
       <line x1="40" y1="72" x2="60" y2="70"/><line x1="60" y1="70" x2="65" y2="92"/>
       <line x1="40" y1="72" x2="30" y2="90"/><line x1="30" y1="90" x2="45" y2="90"/>
+      ${seam(35, 53)}
       <polyline class="arrow" points="58,76 66,82 58,88"/>`),
   },
   {
@@ -243,10 +261,11 @@ const STRETCHES = [
     contexts: ['postworkout', 'bedtime'], difficulty: 'intermediate',
     duration: 30, sides: true,
     cue: 'Lying on your back, cross one ankle over the opposite knee. Reach through and pull the uncrossed thigh toward your chest.',
-    img: svg(`<line x1="8" y1="80" x2="92" y2="80" class="ground"/>
-      <circle cx="18" cy="70" r="8"/>
+    img: svg(`<line x1="6" y1="80" x2="94" y2="80" class="ground"/>
+      <circle cx="18" cy="70" r="10"/>
       <line x1="26" y1="70" x2="55" y2="72"/><line x1="55" y1="72" x2="55" y2="45"/>
       <line class="target" x1="55" y1="60" x2="75" y2="55"/>
+      ${seam(24, 70)}
       <polyline class="arrow" points="68,46 76,52 68,58"/>`),
   },
   {
@@ -254,11 +273,12 @@ const STRETCHES = [
     contexts: ['postworkout', 'bedtime'], difficulty: 'advanced',
     duration: 45, sides: true,
     cue: 'From all fours, bring one knee forward toward your wrist, angling the shin across your body, and extend the other leg straight back. Fold forward if comfortable.',
-    img: svg(`<line x1="8" y1="90" x2="92" y2="90" class="ground"/>
-      <circle cx="30" cy="55" r="8"/>
+    img: svg(`<line x1="6" y1="90" x2="94" y2="90" class="ground"/>
+      <circle cx="30" cy="55" r="10"/>
       <path class="target" d="M35 58 Q50 62 60 60" fill="none"/>
       <line x1="60" y1="60" x2="82" y2="80"/>
       <line x1="35" y1="65" x2="25" y2="85"/><line x1="25" y1="85" x2="45" y2="85"/>
+      ${seam(34, 58)}
       <polyline class="arrow" points="46,66 52,72 58,66"/>`),
   },
   {
@@ -267,11 +287,12 @@ const STRETCHES = [
     duration: 45,
     cue: 'Sit with the soles of your feet together, knees out to the sides. Hold your feet and gently press your knees toward the floor, back straight.',
     img: svg(`
-      <circle cx="50" cy="35" r="9"/>
+      <circle cx="50" cy="35" r="11"/>
       <line x1="50" y1="44" x2="50" y2="65"/>
       <path class="target" d="M50 65 Q30 68 30 82" fill="none"/>
       <path class="target" d="M50 65 Q70 68 70 82" fill="none"/>
       <line x1="30" y1="82" x2="70" y2="82"/>
+      ${seam(50, 44)}
       <polyline class="arrow" points="35,74 30,80 40,80"/>
       <polyline class="arrow" points="65,74 70,80 60,80"/>`),
   },
@@ -281,11 +302,12 @@ const STRETCHES = [
     duration: 20, sides: true,
     cue: 'Facing a wall, step one foot back and press its heel into the floor, leaning forward with a straight back leg until you feel the stretch in your calf.',
     img: svg(`${GROUND}
-      <circle cx="42" cy="24" r="8"/>
+      <circle cx="42" cy="24" r="10"/>
       <line x1="42" y1="32" x2="42" y2="60"/>
       <line class="target" x1="42" y1="60" x2="65" y2="92"/>
       <line x1="42" y1="60" x2="30" y2="92"/>
       <line x1="42" y1="36" x2="70" y2="30"/>
+      ${seam(42, 32)}
       <polyline class="arrow" points="58,84 65,90 58,96"/>`),
   },
   {
@@ -294,10 +316,11 @@ const STRETCHES = [
     duration: 30,
     cue: 'From all fours, tuck your toes and lift your hips up and back, forming an inverted V. Press your heels toward the floor and let your head relax.',
     img: svg(`${GROUND}
-      <circle cx="70" cy="50" r="8"/>
+      <circle cx="70" cy="50" r="10"/>
       <path class="target" d="M64 55 Q45 40 30 70" fill="none"/>
       <line x1="64" y1="55" x2="82" y2="88"/>
       <line class="target" x1="30" y1="70" x2="18" y2="88"/>
+      ${seam(65, 55)}
       <polyline class="arrow" points="40,50 45,42 50,50"/>`),
   },
   {
@@ -305,12 +328,13 @@ const STRETCHES = [
     contexts: ['bedtime', 'morning'], difficulty: 'beginner',
     duration: 20, sides: true,
     cue: 'Lying on your back, pull one knee toward your chest with both hands, keeping the other leg relaxed on the floor or bent.',
-    img: svg(`<line x1="8" y1="80" x2="92" y2="80" class="ground"/>
-      <circle cx="18" cy="70" r="8"/>
+    img: svg(`<line x1="6" y1="80" x2="94" y2="80" class="ground"/>
+      <circle cx="18" cy="70" r="10"/>
       <line x1="26" y1="70" x2="50" y2="72"/>
       <line class="target" x1="50" y1="72" x2="45" y2="45"/>
       <line x1="26" y1="66" x2="45" y2="48"/>
       <line x1="50" y1="72" x2="78" y2="78"/>
+      ${seam(24, 70)}
       <polyline class="arrow" points="50,52 56,46 60,52"/>`),
   },
 ];

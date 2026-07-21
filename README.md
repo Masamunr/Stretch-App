@@ -8,7 +8,7 @@ A simple, no-account stretching app. Pick a routine (or build your own), follow 
 - **Filter by time, difficulty, or muscle group** via simple dropdowns — narrows both the routine list and the custom builder
 - **5 pre-built routines** (Morning Wake-Up, Desk Break Reset, Post-Workout Cooldown, Bedtime Wind-Down, Full Body Deep Stretch), each with a **preview screen** showing the full stretch order and total time before you commit to starting
 - A **custom builder** to pick your own stretches
-- Original, instructional illustrations for every stretch: the specific muscle being stretched is drawn in the accent color directly on the figure (rather than a floating marker), plus a small arrow showing the direction of movement — all hand-drawn SVG, so no copyright concerns
+- Original, instructional illustrations for every stretch: a solid flat-silhouette figure (in the app's sage tone) with the specific muscle being stretched picked out in gold, plus a small arrow showing the direction of movement — all hand-drawn SVG, so no copyright concerns
 - A **session player** with a circular countdown timer, play/pause, skip forward/back, and cue text for every stretch
 - A **log** of every completed session, stored in your browser's local storage
 - **Metrics**: total sessions, total minutes, day streak, average session length, and which muscle groups you stretch most

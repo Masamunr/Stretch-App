@@ -30,6 +30,7 @@ const state = {
   homeMuscleFilter: 'all',
   customSelection: new Set(),
   sessions: loadSessions(),
+  previewRoutineId: null,
 
   queue: [],
   index: 0,
@@ -79,19 +80,19 @@ function renderHome() {
       (muscle === 'all' || stretches.some(s => s.part === muscle));
   });
 
-  const contextChips = ['all', ...CONTEXTS.map(c => c.id)].map(id => {
-    const label = id === 'all' ? 'All' : CONTEXTS.find(c => c.id === id).label;
-    return `<button class="chip ${ctx === id ? 'active' : ''}" data-ctxchip="${id}">${label}</button>`;
+  const contextOptions = ['all', ...CONTEXTS.map(c => c.id)].map(id => {
+    const label = id === 'all' ? 'Any time' : CONTEXTS.find(c => c.id === id).label;
+    return `<option value="${id}" ${ctx === id ? 'selected' : ''}>${label}</option>`;
   }).join('');
 
-  const diffChips = ['all', ...DIFFICULTIES].map(id => {
-    const label = id === 'all' ? 'All levels' : id[0].toUpperCase() + id.slice(1);
-    return `<button class="chip ${diff === id ? 'active' : ''}" data-diffchip="${id}">${label}</button>`;
+  const diffOptions = ['all', ...DIFFICULTIES].map(id => {
+    const label = id === 'all' ? 'Any level' : id[0].toUpperCase() + id.slice(1);
+    return `<option value="${id}" ${diff === id ? 'selected' : ''}>${label}</option>`;
   }).join('');
 
-  const muscleChips = ['all', ...MUSCLE_GROUPS].map(id => {
-    const label = id === 'all' ? 'All muscles' : id;
-    return `<button class="chip ${muscle === id ? 'active' : ''}" data-musclechip="${id}">${label}</button>`;
+  const muscleOptions = ['all', ...MUSCLE_GROUPS].map(id => {
+    const label = id === 'all' ? 'Any muscle' : id;
+    return `<option value="${id}" ${muscle === id ? 'selected' : ''}>${label}</option>`;
   }).join('');
 
   const routineCards = filteredRoutines.map(r => {
@@ -107,7 +108,7 @@ function renderHome() {
           <span class="difficulty-badge difficulty-${r.difficulty}">${r.difficulty}</span>
         </div>
         <div class="routine-blurb">${r.blurb}</div>
-        <button class="routine-start-btn" data-startroutine="${r.id}">Start routine</button>
+        <button class="routine-start-btn" data-previewroutine="${r.id}">Preview routine</button>
       </div>`;
   }).join('') || `<div class="empty-state">No routines match those filters -- try widening them.</div>`;
 
@@ -126,11 +127,12 @@ function renderHome() {
     : `<div class="empty-state" style="padding:24px 0;">No stretches for that muscle group.</div>`;
 
   root.innerHTML = `
-    <div class="section-label">Filter by time</div>
-    <div class="filter-row">${contextChips}</div>
-    <div class="filter-row">${diffChips}</div>
-    <div class="section-label">Filter by muscle</div>
-    <div class="filter-row">${muscleChips}</div>
+    <div class="section-label">Filters</div>
+    <div class="filter-bar">
+      <div class="select-wrap"><select id="ctxSelect">${contextOptions}</select></div>
+      <div class="select-wrap"><select id="diffSelect">${diffOptions}</select></div>
+      <div class="select-wrap"><select id="muscleSelect">${muscleOptions}</select></div>
+    </div>
 
     <div class="section-label">Routines</div>
     ${routineCards}
@@ -144,18 +146,17 @@ function renderHome() {
     </div>
   `;
 
-  root.querySelectorAll('[data-ctxchip]').forEach(el => el.addEventListener('click', () => {
-    state.homeContextFilter = el.dataset.ctxchip; renderHome();
-  }));
-  root.querySelectorAll('[data-diffchip]').forEach(el => el.addEventListener('click', () => {
-    state.homeDifficultyFilter = el.dataset.diffchip; renderHome();
-  }));
-  root.querySelectorAll('[data-musclechip]').forEach(el => el.addEventListener('click', () => {
-    state.homeMuscleFilter = el.dataset.musclechip; renderHome();
-  }));
-  root.querySelectorAll('[data-startroutine]').forEach(el => el.addEventListener('click', () => {
-    const routine = ROUTINES.find(r => r.id === el.dataset.startroutine);
-    startSession(routine.stretchIds, routine.name);
+  document.getElementById('ctxSelect').addEventListener('change', (e) => {
+    state.homeContextFilter = e.target.value; renderHome();
+  });
+  document.getElementById('diffSelect').addEventListener('change', (e) => {
+    state.homeDifficultyFilter = e.target.value; renderHome();
+  });
+  document.getElementById('muscleSelect').addEventListener('change', (e) => {
+    state.homeMuscleFilter = e.target.value; renderHome();
+  });
+  root.querySelectorAll('[data-previewroutine]').forEach(el => el.addEventListener('click', () => {
+    showPreview(el.dataset.previewroutine);
   }));
   root.querySelectorAll('[data-custom]').forEach(el => el.addEventListener('change', () => {
     if (el.checked) state.customSelection.add(el.dataset.custom);
@@ -168,6 +169,49 @@ function renderHome() {
   if (customBtn) customBtn.addEventListener('click', () => {
     startSession([...state.customSelection], 'Custom Session');
   });
+}
+
+/* ---------------------------------------------------------
+   Routine preview
+--------------------------------------------------------- */
+function showPreview(routineId) {
+  state.previewRoutineId = routineId;
+  setView('preview');
+}
+
+function renderPreview() {
+  const root = document.getElementById('view-preview');
+  const routine = ROUTINES.find(r => r.id === state.previewRoutineId);
+  if (!routine) { root.innerHTML = ''; return; }
+
+  const stretches = routine.stretchIds.map(id => stretchById[id]);
+  const totalSecs = stretches.reduce((sum, s) => sum + s.duration * (s.sides ? 2 : 1), 0);
+
+  const rows = stretches.map((s, i) => `
+    <div class="preview-row">
+      <div class="preview-index">${i + 1}</div>
+      <div class="pose-thumb">${s.img}</div>
+      <div class="info">
+        <div class="name">${s.name}${s.sides ? ' <span class="side-note">(both sides)</span>' : ''}</div>
+        <div class="meta">${s.part} - ${s.duration}s${s.sides ? ' /side' : ''}</div>
+      </div>
+    </div>`).join('');
+
+  root.innerHTML = `
+    <div class="session-header">
+      <button class="session-exit" id="previewBack">Back</button>
+      <span class="difficulty-badge difficulty-${routine.difficulty}">${routine.difficulty}</span>
+    </div>
+    <h2 style="margin-top:14px;">${routine.name}</h2>
+    <div class="routine-blurb" style="margin-top:6px;">${routine.blurb}</div>
+    <div class="routine-meta" style="margin-top:6px;">${stretches.length} stretches - ~${Math.round(totalSecs / 60)} min</div>
+    <div class="section-label">Order</div>
+    ${rows}
+    <button class="routine-start-btn" id="previewStart" style="margin-top:18px;">Start routine</button>
+  `;
+
+  document.getElementById('previewBack').addEventListener('click', () => setView('home'));
+  document.getElementById('previewStart').addEventListener('click', () => startSession(routine.stretchIds, routine.name));
 }
 
 /* ---------------------------------------------------------
@@ -446,6 +490,7 @@ function render() {
   if (state.view === 'home') renderHome();
   if (state.view === 'log') renderLog();
   if (state.view === 'metrics') renderMetrics();
+  if (state.view === 'preview') renderPreview();
 }
 
 render();

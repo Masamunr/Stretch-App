@@ -27,6 +27,7 @@ const state = {
   view: 'home',
   homeContextFilter: 'all',
   homeDifficultyFilter: 'all',
+  homeMuscleFilter: 'all',
   customSelection: new Set(),
   sessions: loadSessions(),
 
@@ -69,11 +70,14 @@ function renderHome() {
   const root = document.getElementById('view-home');
   const ctx = state.homeContextFilter;
   const diff = state.homeDifficultyFilter;
+  const muscle = state.homeMuscleFilter;
 
-  const filteredRoutines = ROUTINES.filter(r =>
-    (ctx === 'all' || r.context === ctx) &&
-    (diff === 'all' || r.difficulty === diff)
-  );
+  const filteredRoutines = ROUTINES.filter(r => {
+    const stretches = r.stretchIds.map(id => stretchById[id]);
+    return (ctx === 'all' || r.context === ctx) &&
+      (diff === 'all' || r.difficulty === diff) &&
+      (muscle === 'all' || stretches.some(s => s.part === muscle));
+  });
 
   const contextChips = ['all', ...CONTEXTS.map(c => c.id)].map(id => {
     const label = id === 'all' ? 'All' : CONTEXTS.find(c => c.id === id).label;
@@ -83,6 +87,11 @@ function renderHome() {
   const diffChips = ['all', ...DIFFICULTIES].map(id => {
     const label = id === 'all' ? 'All levels' : id[0].toUpperCase() + id.slice(1);
     return `<button class="chip ${diff === id ? 'active' : ''}" data-diffchip="${id}">${label}</button>`;
+  }).join('');
+
+  const muscleChips = ['all', ...MUSCLE_GROUPS].map(id => {
+    const label = id === 'all' ? 'All muscles' : id;
+    return `<button class="chip ${muscle === id ? 'active' : ''}" data-musclechip="${id}">${label}</button>`;
   }).join('');
 
   const routineCards = filteredRoutines.map(r => {
@@ -102,21 +111,26 @@ function renderHome() {
       </div>`;
   }).join('') || `<div class="empty-state">No routines match those filters -- try widening them.</div>`;
 
-  const customRows = STRETCHES.map(s => `
-    <label class="stretch-row">
-      <div class="pose-thumb">${s.img}</div>
-      <div class="info">
-        <div class="name">${s.name}</div>
-        <div class="meta">${s.part} - ${s.duration}s${s.sides ? ' /side' : ''} - ${s.difficulty}</div>
-      </div>
-      <input type="checkbox" data-custom="${s.id}" ${state.customSelection.has(s.id) ? 'checked' : ''}>
-    </label>
-  `).join('');
+  const visibleStretches = STRETCHES.filter(s => muscle === 'all' || s.part === muscle);
+  const customRows = visibleStretches.length
+    ? visibleStretches.map(s => `
+      <label class="stretch-row">
+        <div class="pose-thumb">${s.img}</div>
+        <div class="info">
+          <div class="name">${s.name}</div>
+          <div class="meta">${s.part} - ${s.duration}s${s.sides ? ' /side' : ''} - ${s.difficulty}</div>
+        </div>
+        <input type="checkbox" data-custom="${s.id}" ${state.customSelection.has(s.id) ? 'checked' : ''}>
+      </label>
+    `).join('')
+    : `<div class="empty-state" style="padding:24px 0;">No stretches for that muscle group.</div>`;
 
   root.innerHTML = `
     <div class="section-label">Filter by time</div>
     <div class="filter-row">${contextChips}</div>
     <div class="filter-row">${diffChips}</div>
+    <div class="section-label">Filter by muscle</div>
+    <div class="filter-row">${muscleChips}</div>
 
     <div class="section-label">Routines</div>
     ${routineCards}
@@ -135,6 +149,9 @@ function renderHome() {
   }));
   root.querySelectorAll('[data-diffchip]').forEach(el => el.addEventListener('click', () => {
     state.homeDifficultyFilter = el.dataset.diffchip; renderHome();
+  }));
+  root.querySelectorAll('[data-musclechip]').forEach(el => el.addEventListener('click', () => {
+    state.homeMuscleFilter = el.dataset.musclechip; renderHome();
   }));
   root.querySelectorAll('[data-startroutine]').forEach(el => el.addEventListener('click', () => {
     const routine = ROUTINES.find(r => r.id === el.dataset.startroutine);

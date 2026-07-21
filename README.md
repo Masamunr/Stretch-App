@@ -26,7 +26,8 @@ then visit `http://localhost:8000`.
 ## Publishing to GitHub Pages
 
 1. Create a new repository on GitHub (e.g. `stretch-app`).
-2. Push these four files (`index.html`, `styles.css`, `data.js`, `app.js`) to the repo root:
+2. Push all the files in this folder to the repo root:
+   `index.html`, `styles.css`, `data.js`, `app.js`, `manifest.json`, `favicon.svg`, `favicon-32x32.png`, `favicon-16x16.png`, `apple-touch-icon.png`, `icon-192.png`, `icon-512.png`
    ```bash
    git init
    git add .
@@ -38,7 +39,16 @@ then visit `http://localhost:8000`.
 3. On GitHub, go to **Settings → Pages**.
 4. Under **Source**, choose **Deploy from a branch**, pick `main` and `/ (root)`, then **Save**.
 5. After a minute or two, your app will be live at `https://<your-username>.github.io/stretch-app/`.
-6. On your phone, open that URL and use "Add to Home Screen" (Safari/Chrome share menu) so it launches like a normal app.
+6. On your phone, open that URL and use "Add to Home Screen" (Safari/Chrome share menu) — it'll use the app icon and launch full-screen like a normal app, thanks to `manifest.json`.
+
+## The app icon
+
+`favicon.svg` is the source icon (a bending figure with the reaching arm picked out in gold, matching the in-app illustration style). The PNGs are pre-rendered from it at the sizes browsers and phones actually ask for:
+- `favicon-16x16.png` / `favicon-32x32.png` — browser tab icon
+- `apple-touch-icon.png` (180×180) — iOS home screen icon
+- `icon-192.png` / `icon-512.png` — referenced by `manifest.json` for Android/PWA home screen icons
+
+If you ever want to redesign it, edit `favicon.svg` and re-export the PNGs at the sizes above (any online SVG-to-PNG converter works, or a design tool like Figma).
 
 ## Notes on data
 
